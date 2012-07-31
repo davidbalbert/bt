@@ -4,8 +4,8 @@ require File.expand_path('../lib/bt/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["David Albert"]
   gem.email         = ["davidbalbert@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{A Ruby BitTorrent library}
+  gem.summary       = %q{A Ruby BitTorrent library}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
@@ -13,5 +13,5 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "bt"
   gem.require_paths = ["lib"]
-  gem.version       = Bt::VERSION
+  gem.version       = BT::VERSION
 end

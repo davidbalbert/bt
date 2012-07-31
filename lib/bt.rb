@@ -1,5 +1,5 @@
 require "bt/version"
 
-module Bt
+module BT
   # Your code goes here...
 end

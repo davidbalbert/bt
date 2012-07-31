@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "bt"
   gem.require_paths = ["lib"]
   gem.version       = BT::VERSION
+
+  gem.add_dependency "bencode", "~> 0.7.0"
 end

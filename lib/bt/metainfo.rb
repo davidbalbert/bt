@@ -1,3 +1,6 @@
+require 'fileutils'
+require 'digest'
+
 require 'bencode'
 
 module BT
@@ -25,6 +28,29 @@ module BT
       else
         @info["info"]["files"].map { |f| FileInfo.new(File.join(*f["path"]), f["length"]) }
       end
+    end
+
+    def trackers
+      # TODO: Make this work with multitracker metadata extension:
+      # http://bittorrent.org/beps/bep_0012.html
+      @trackers ||= [Tracker.new(@info["announce"])]
+    end
+
+    def write_files(destination)
+      destination = File.expand_path(destination)
+
+      files.each do |fi|
+        path = File.join(destination, name, fi.path)
+        FileUtils.mkdir_p(File.dirname(path))
+        File.open(path, "w") do |f|
+          # XXX: truncate is not available on all platforms. Do something nicer?
+          f.truncate(fi.length)
+        end
+      end
+    end
+
+    def info_hash
+      @info_hash ||= Digest::SHA1.new.digest((@info["info"].bencode))
     end
 
     def inspect

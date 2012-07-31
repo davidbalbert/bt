@@ -17,9 +17,9 @@ module BT
 
     def files
       @files ||= if @info["info"]["length"]
-        [name]
+        [FileInfo.new(@info["info"]["name"], @info["info"]["length"])]
       else
-        @info["info"]["files"].map { |f| File.join(*f["path"]) }
+        @info["info"]["files"].map { |f| FileInfo.new(File.join(*f["path"]), f["length"]) }
       end
     end
 

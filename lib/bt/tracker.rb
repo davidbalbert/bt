@@ -13,7 +13,11 @@ module BT
       params["peer_id"] = client.peer_id
       params["compact"] = "1"
 
-      URI::encode_www_form(params)
+      url = @url.dup
+
+      url.query = URI::encode_www_form(params)
+
+      Net::HTTP.get_response(url)
     end
   end
 end

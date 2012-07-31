@@ -4,6 +4,10 @@ module BT
   class MetaInfo
     attr_reader :path
 
+    class << self
+      alias load new
+    end
+
     def initialize(path)
       @path = File.expand_path(path)
       @info = BEncode.load(File.open(@path, "rb") { |f| f.read })

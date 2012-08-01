@@ -6,5 +6,4 @@ require 'bt/peer'
 require 'bt/bittorrent'
 
 module BT
-  DEFAULT_PEER_ID = "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
 end

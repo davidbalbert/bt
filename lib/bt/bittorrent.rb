@@ -1,12 +1,15 @@
 module BT
   class BitTorrent
+    DEFAULT_PEER_ID = "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
+    DEFAULT_PORT = 6881
+
     attr_reader :metainfo, :peer_id, :peers, :port
 
-    def initialize(torrent, destination, peer_id=nil)
+    def initialize(torrent, destination, peer_id=nil, port=nil)
       @metainfo = MetaInfo.new(torrent)
       @destination = destination
       @peer_id = peer_id || DEFAULT_PEER_ID
-      @port = 6881
+      @port = port || DEFAULT_PORT
 
       @metainfo.write_files(@destination)
 

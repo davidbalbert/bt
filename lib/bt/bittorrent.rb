@@ -22,7 +22,7 @@ module BT
       # XXX: Running OpenTracker locally gives me myself in the peers list.
       # Make sure to remove myself here. Is this normal behavior?
       Socket.ip_address_list.select(&:ipv4?).map(&:ip_address).each do |ip|
-        @peers = @peers.reject { |peer| peer.ip == ip && peer.port == port }
+        @peers = @peers.reject { |peer| peer.ip == ip && peer.port == @port }
       end
     end
   end

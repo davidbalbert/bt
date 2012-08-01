@@ -24,6 +24,8 @@ module BT
       Socket.ip_address_list.select(&:ipv4?).map(&:ip_address).each do |ip|
         @peers = @peers.reject { |peer| peer.ip == ip && peer.port == @port }
       end
+
+      @peers[0].start
     end
   end
 end

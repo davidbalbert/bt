@@ -23,7 +23,7 @@ module BT
         @socket.write("\x13BitTorrent protocol\0\0\0\0\0\0\0\0#{@info_hash}#{@peer_id}")
 
         resp = @socket.read(49)
-        resp << @socket.read(resp.bytes.to_a[0])
+        resp << @socket.read(resp.getbyte(0))
         p resp
 
         @socket.close

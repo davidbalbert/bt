@@ -30,7 +30,9 @@ module BT
         begin
           parse_handshake(resp)
 
-          p Message.from_io(@socket)
+          loop do
+            p Message.from_io(@socket)
+          end
         rescue e
           puts e.message
         ensure

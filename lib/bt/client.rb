@@ -34,7 +34,7 @@ module BT
       torrent = Torrent.new(metainfo, destination, peers)
       @torrents[metainfo.info_hash] = torrent
 
-      peers[0].start
+      peers.each(&:start)
 
       metainfo.info_hash
     end

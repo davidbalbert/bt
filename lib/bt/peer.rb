@@ -5,7 +5,7 @@ module BT
   PROTOCOL_NAME = "BitTorrent protocol"
 
   class Peer
-    attr_reader :ip, :port
+    attr_reader :ip, :port, :peer_id
 
     def initialize(ip, port, info_hash, my_peer_id)
       @ip = ip
@@ -22,14 +22,20 @@ module BT
     def start
       Thread.new do
         @socket = TCPSocket.new(@ip.to_s, @port)
-        @socket.write("\x13#{PROTOCOL_NAME}\0\0\0\0\0\0\0\0#{@info_hash}#{@peer_id}")
+        @socket.write("\x13#{PROTOCOL_NAME}\0\0\0\0\0\0\0\0#{@info_hash}#{@my_peer_id}")
 
         resp = @socket.read(49)
         resp << @socket.read(resp.getbyte(0))
 
-        parse_handshake(resp)
+        begin
+          parse_handshake(resp)
 
-        @socket.close
+          p Message.from_io(@socket)
+        rescue e
+          puts e.message
+        ensure
+          @socket.close
+        end
       end.join
     end
 

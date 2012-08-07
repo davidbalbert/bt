@@ -8,7 +8,7 @@ module BT
     def initialize(peer_id=nil, port=nil)
       @peer_id = peer_id || DEFAULT_PEER_ID
       @port = port || DEFAULT_PORT
-      @torrents = {}
+      @torrents = Hash.new { |hash, key| Torrent.new }
     end
 
     def add(torrent, destination)
@@ -38,10 +38,19 @@ module BT
 
       metainfo.info_hash
     end
+
+    def [](info_hash)
+      @torrents[info_hash].metainfo
+    end
+
+    def reset
+      @torrents.delete_if { true }
+
+      self
+    end
   end
 
-  class Torrent < Struct.new(:metainfo, :destination, :peers)
-  end
+  Torrent = Struct.new(:metainfo, :destination, :peers)
 end
 
 # client = BT::Client.new

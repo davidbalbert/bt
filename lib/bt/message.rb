@@ -1,4 +1,6 @@
 module BT
+  MESSAGE_IDS = [:choke, :unchoke, :interested, :uninterested, :have,
+                 :bitfield, :request, :piece, :cancel]
   class Message
     attr_reader :length, :type
 
@@ -18,27 +20,10 @@ module BT
       @length = length
       @payload
 
-      @type = case type
-      when nil
-        :keep_alive
-      when 0
-        :choke
-      when 1
-        :unchoke
-      when 2
-        :interested
-      when 3
-        :uninterested
-      when 4
-        :have
-      when 5
-        :bitfield
-      when 6
-        :request
-      when 7
-        :piece
-      when 8
-        :cancel
+      @type = if type.nil?
+        :keepalive
+      else
+        MESSAGE_IDS[type]
       end
     end
 

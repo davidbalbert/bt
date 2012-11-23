@@ -1,12 +1,11 @@
 module BT
   class Client
-    DEFAULT_PEER_ID = "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
     DEFAULT_PORT = 6881
 
     attr_reader :metainfo, :peer_id, :peers, :port
 
     def initialize(peer_id=nil, port=nil)
-      @peer_id = peer_id || DEFAULT_PEER_ID
+      @peer_id = peer_id || make_default_peer_id
       @port = port || DEFAULT_PORT
       @torrents = Hash.new { |hash, key| Torrent.new }
     end
@@ -48,14 +47,15 @@ module BT
 
       self
     end
+
+    private
+    def make_default_peer_id
+      # build peer id out of version string, process id, and current time.
+      # Should be unique yet give us some identifying info. More info here:
+      # http://wiki.theory.org/BitTorrentSpecification#peer_id
+      "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
+    end
   end
 
   Torrent = Struct.new(:metainfo, :destination, :peers)
 end
-
-# client = BT::Client.new
-# client.add('/path/to/metainfo.torrent', '/output/path')
-# => info_hash
-#
-# client[info_hash]
-# => #<MetaInfo>

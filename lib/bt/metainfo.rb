@@ -4,6 +4,8 @@ require 'digest'
 require 'bencode'
 
 module BT
+  FileInfo = Struct.new(:path, :length)
+
   class MetaInfo
     attr_reader :path
 

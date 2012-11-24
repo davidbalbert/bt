@@ -1,6 +1,10 @@
 module BT
-  MESSAGE_IDS = [:choke, :unchoke, :interested, :uninterested, :have,
+  MESSAGE_SYMS = [:choke, :unchoke, :interested, :uninterested, :have,
                  :bitfield, :request, :piece, :cancel]
+
+  MESSAGE_IDS = {:keepalive => nil, :choke => 0, :unchoke => 1, :interested =>
+                 2, :uninterested => 3, :have => 4, :bitfield => 5, :request =>
+                 6, :piece => 7, :cancel => 8}
   class Message
     attr_reader :length, :type
 
@@ -16,19 +20,31 @@ module BT
       new(length, type, payload)
     end
 
+    def self.keepalive
+      new(0, nil, "")
+    end
+
     def initialize(length, type, payload)
       @length = length
-      @payload
+      @payload = payload
 
       @type = if type.nil?
         :keepalive
       else
-        MESSAGE_IDS[type]
+        MESSAGE_SYMS[type]
       end
     end
 
     def inspect
-      "#<BT::Message #{type}>"
+      "#<BT::Message #{@type}>"
+    end
+
+    def to_s
+      out = [@length].pack("N")
+      out << [MESSAGE_IDS[@type]].pack("C") if MESSAGE_IDS[@type]
+      out << @payload
+
+      out
     end
 
   end

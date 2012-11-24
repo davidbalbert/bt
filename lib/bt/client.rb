@@ -10,9 +10,11 @@ module BT
       @torrents = Hash.new { |hash, key| Torrent.new }
     end
 
+    # TODO: Separate Client#add and Client#start
     def add(torrent, destination)
       metainfo = MetaInfo.new(torrent)
 
+      # TODO: The Client should write the files, not the MetaInfo
       metainfo.write_files(destination)
 
       peers = []
@@ -24,7 +26,7 @@ module BT
       # XXX: Running OpenTracker locally gives me myself in the peers list.
       # Make sure to remove myself here. Is this normal behavior?
       #
-      # Once we're connecting to all peers, we should remove this code in favor
+      # TODO: Once we're connecting to all peers, we should remove this code in favor
       # of disconnecting when we receive our own peer_id in the handshake
       Socket.ip_address_list.select(&:ipv4?).map(&:ip_address).each do |ip|
         peers = peers.reject { |peer| peer.ip == ip && peer.port == @port }

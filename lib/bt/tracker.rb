@@ -9,6 +9,8 @@ module BT
     end
 
     def announce(client, metainfo)
+      # TODO: This request shouldn't be so hardcoded (uploaded and downloaded
+      # percents for instance)
       params = {}
       params["info_hash"] = metainfo.info_hash
       params["peer_id"] = client.peer_id
@@ -30,6 +32,7 @@ module BT
       @last_response = BEncode.load(resp.body)
       peers = @last_response["peers"]
 
+      # TODO: Also support old style text IP lists
       peers.unpack("a4n" * (peers.length/6)).each_slice(2).map do |ip_string, port|
         Peer.new(IPAddr.new_ntoh(ip_string), port, metainfo.info_hash, client.peer_id)
       end

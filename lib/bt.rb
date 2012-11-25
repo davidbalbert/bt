@@ -3,6 +3,7 @@ require 'bt/metainfo'
 require 'bt/tracker'
 require 'bt/message'
 require 'bt/peer'
+require 'bt/bitfield'
 require 'bt/client'
 
 module BT

@@ -34,7 +34,7 @@ module BT
 
       # TODO: Also support old style text IP lists
       peers.unpack("a4n" * (peers.length/6)).each_slice(2).map do |ip_string, port|
-        Peer.new(IPAddr.new_ntoh(ip_string), port, metainfo.info_hash, client.peer_id)
+        Peer.new(IPAddr.new_ntoh(ip_string), port, metainfo, client.peer_id)
       end
     end
   end

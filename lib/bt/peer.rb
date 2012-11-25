@@ -9,10 +9,11 @@ module BT
 
     attr_reader :ip, :port, :peer_id
 
-    def initialize(ip, port, info_hash, my_peer_id)
+    def initialize(ip, port, metainfo, my_peer_id)
       @ip = ip
       @port = port
-      @info_hash = info_hash
+      @metainfo = metainfo
+      @info_hash = metainfo.info_hash
       @my_peer_id = my_peer_id
 
       @am_choking = true
@@ -85,7 +86,16 @@ module BT
           end
 
           loop do
-            p Message.from_io(@socket)
+            message = Message.from_io(@socket)
+            p message
+
+            case message.type
+            when :keepalive
+              # TODO: reset a 2 minute timer. somewhere else drop the
+              # connection if they haven't responded for over two minutes
+            when :bitfield
+              @bitfield = BitField.new(message.payload, @metainfo.piece_count)
+            end
           end
         rescue Exception => e
           puts e.message
@@ -95,7 +105,7 @@ module BT
             @running = false
           end
         end
-      end.join
+      end
     end
 
     def running?

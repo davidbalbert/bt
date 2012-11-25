@@ -24,6 +24,10 @@ module BT
       @info["info"]["name"]
     end
 
+    def piece_count
+      @info["info"]["pieces"].size / 20
+    end
+
     def files
       @files ||= if @info["info"]["length"]
         [FileInfo.new(@info["info"]["name"], @info["info"]["length"])]

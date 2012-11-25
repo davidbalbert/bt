@@ -6,7 +6,7 @@ module BT
                  2, :uninterested => 3, :have => 4, :bitfield => 5, :request =>
                  6, :piece => 7, :cancel => 8}
   class Message
-    attr_reader :length, :type
+    attr_reader :length, :type, :payload
 
     def self.from_io(io)
       length = io.read(4).unpack("N")[0]

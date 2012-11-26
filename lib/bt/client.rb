@@ -9,7 +9,11 @@ module BT
     def initialize(peer_id=nil, port=nil)
       @peer_id = peer_id || make_default_peer_id
       @port = port || DEFAULT_PORT
-      @torrents = Hash.new { |hash, key| Torrent.new }
+      @torrents = {}
+    end
+
+    def torrents
+      @torrents.values
     end
 
     # TODO: Separate Client#add and Client#start

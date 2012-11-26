@@ -2,12 +2,20 @@ require 'thread'
 require 'socket'
 
 module BT
-  PROTOCOL_NAME = "BitTorrent protocol"
-
   class Peer
+    PROTOCOL_NAME = "BitTorrent protocol"
     KEEP_ALIVE_TIME = 120
 
-    attr_reader :ip, :port, :peer_id
+    attr_reader :ip, :port, :peer_id, :am_choking, :am_interested, :peer_choking, :peer_interested
+
+    alias am_choking? am_choking
+    alias am_interested? am_interested
+
+    alias peer_choking? peer_choking
+    alias peer_interested? peer_interested
+
+    alias choked? peer_choking?
+    alias interested? am_interested?
 
     def initialize(ip, port, metainfo, my_peer_id)
       @ip = ip
@@ -100,6 +108,11 @@ module BT
               @bitfield = BitField.new(message.payload, @metainfo.piece_count)
             when :unchoke
               @peer_choking = false
+
+              # XXX: This is only temporary. It should be controlled by an
+              # outside coordinating object
+              @send_queue << Message.interested
+              @am_interested = true
             end
           end
         rescue Exception => e

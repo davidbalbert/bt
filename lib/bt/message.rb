@@ -24,6 +24,10 @@ module BT
       new(0, nil, "")
     end
 
+    def self.interested
+      new(1, MESSAGE_IDS[:interested], "")
+    end
+
     def initialize(length, type, payload)
       @length = length
       @payload = payload

@@ -113,6 +113,11 @@ module BT
               # outside coordinating object
               @send_queue << Message.interested
               @am_interested = true
+
+              @send_queue << Message.request(0, 0, 2**14)
+            when :piece
+              block = Block.new(*message.payload.unpack("NNa*"))
+              p block
             end
           end
         rescue Exception => e

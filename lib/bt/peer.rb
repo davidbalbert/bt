@@ -97,7 +97,7 @@ module BT
           end
 
           loop do
-            message = Message.from_io(@socket)
+            message = read_message
             p message
 
             case message.type
@@ -148,6 +148,16 @@ module BT
     end
 
     private
+
+    def read_message
+      length = @socket.read(4).unpack("N")[0]
+      body = length > 0 ? @socket.read(length) : ""
+
+      type = body.getbyte(0)
+      payload = body[1..-1]
+
+      Message.new(length, type, payload)
+    end
 
     def parse_handshake(handshake)
       peer_protocol_length = handshake.getbyte(0)

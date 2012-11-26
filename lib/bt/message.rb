@@ -9,18 +9,6 @@ module BT
 
     attr_reader :length, :type, :payload
 
-    def self.from_io(io)
-      length = io.read(4).unpack("N")[0]
-      puts "length: #{length}"
-      body = io.read(length) if length > 0
-      body ||= ""
-
-      type = body.getbyte(0)
-      payload = body[1..-1]
-
-      new(length, type, payload)
-    end
-
     def self.keepalive
       new(0, nil, "")
     end

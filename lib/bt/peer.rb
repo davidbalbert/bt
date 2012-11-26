@@ -16,8 +16,11 @@ module BT
       @info_hash = metainfo.info_hash
       @my_peer_id = my_peer_id
 
+      # what we're doing to the peer
       @am_choking = true
       @am_interested = false
+
+      # what the peer is doing to us
       @peer_choking = true
       @peer_interested = false
 
@@ -95,6 +98,8 @@ module BT
               # connection if they haven't responded for over two minutes
             when :bitfield
               @bitfield = BitField.new(message.payload, @metainfo.piece_count)
+            when :unchoke
+              @peer_choking = false
             end
           end
         rescue Exception => e
@@ -120,6 +125,10 @@ module BT
       end
     end
 
+    def inspect
+      "#<BT::Peer:#{@ip.to_s}:#{@port}#{@peer_id ? " id=#{@peer_id}" : ""}>"
+    end
+
     private
 
     def parse_handshake(handshake)
@@ -137,10 +146,6 @@ module BT
       if @peer_id == @my_peer_id
         raise PeerError, "#{inspect} says: Won't connect to myself"
       end
-    end
-
-    def inspect
-      "#<BT::Peer:#{@ip.to_s}:#{@port}#{@peer_id ? " id=#{@peer_id}" : ""}>"
     end
   end
 

@@ -1,8 +1,10 @@
 module BT
+  Torrent = Struct.new(:metainfo, :destination, :peers)
+
   class Client
     DEFAULT_PORT = 6881
 
-    attr_reader :metainfo, :peer_id, :peers, :port
+    attr_reader :metainfo, :peer_id, :port
 
     def initialize(peer_id=nil, port=nil)
       @peer_id = peer_id || make_default_peer_id
@@ -41,7 +43,7 @@ module BT
     end
 
     def [](info_hash)
-      @torrents[info_hash].metainfo
+      @torrents[info_hash]
     end
 
     def reset
@@ -58,6 +60,4 @@ module BT
       "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
     end
   end
-
-  Torrent = Struct.new(:metainfo, :destination, :peers)
 end

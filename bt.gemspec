@@ -16,4 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = BT::VERSION
 
   gem.add_dependency "bencode", "~> 0.7.0"
+
+  gem.add_development_dependency "pry", "~> 0.9.10"
+  gem.add_development_dependency "pry-debundle", "~> 0.6"
 end

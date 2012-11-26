@@ -1,5 +1,6 @@
 require 'bt/version'
 require 'bt/metainfo'
+require 'bt/fileset'
 require 'bt/tracker'
 require 'bt/message'
 require 'bt/peer'

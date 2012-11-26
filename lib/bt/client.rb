@@ -1,5 +1,5 @@
 module BT
-  Torrent = Struct.new(:metainfo, :destination, :peers)
+  Torrent = Struct.new(:metainfo, :destination, :fileset, :peers)
 
   class Client
     DEFAULT_PORT = 6881
@@ -20,8 +20,8 @@ module BT
     def add(torrent, destination)
       metainfo = MetaInfo.new(torrent)
 
-      # TODO: The Client should write the files, not the MetaInfo
-      metainfo.write_files(destination)
+      fileset = FileSet.new(metainfo, destination)
+      fileset.touch!
 
       peers = []
 
@@ -38,7 +38,7 @@ module BT
         peers = peers.reject { |peer| peer.ip == ip && peer.port == @port }
       end
 
-      torrent = Torrent.new(metainfo, destination, peers)
+      torrent = Torrent.new(metainfo, fileset, destination, peers)
       @torrents[metainfo.info_hash] = torrent
 
       peers.each(&:start)

@@ -20,6 +20,14 @@ module BT
       @info["info"]["name"].force_encoding("UTF-8")
     end
 
+    def single_file?
+      @info["info"]["length"]
+    end
+
+    def multiple_files?
+      !single_file?
+    end
+
     def name
       @info["info"]["name"]
     end
@@ -29,7 +37,7 @@ module BT
     end
 
     def files
-      @files ||= if @info["info"]["length"]
+      @files ||= if single_file?
         [FileInfo.new(@info["info"]["name"], @info["info"]["length"])]
       else
         @info["info"]["files"].map { |f| FileInfo.new(File.join(*f["path"]), f["length"]) }
@@ -40,19 +48,6 @@ module BT
       # TODO: Make this work with multitracker metadata extension:
       # http://bittorrent.org/beps/bep_0012.html
       @trackers ||= [Tracker.new(@info["announce"])]
-    end
-
-    def write_files(destination)
-      destination = File.expand_path(destination)
-
-      files.each do |fi|
-        path = File.join(destination, name, fi.path)
-        FileUtils.mkdir_p(File.dirname(path))
-        File.open(path, "w") do |f|
-          # XXX: truncate is not available on all platforms. Do something nicer?
-          f.truncate(fi.length)
-        end
-      end
     end
 
     def info_hash

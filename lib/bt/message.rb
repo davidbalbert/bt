@@ -39,7 +39,7 @@ module BT
 
     def to_s
       out = [@length].pack("N")
-      out << [MESSAGE_IDS[@type]].pack("C") if MESSAGE_IDS[@type]
+      out << MESSAGE_IDS[@type].chr if MESSAGE_IDS[@type]
       out << @payload
 
       out

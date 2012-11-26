@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module BT
   Torrent = Struct.new(:metainfo, :destination, :fileset, :peers)
 
@@ -58,10 +60,10 @@ module BT
 
     private
     def make_default_peer_id
-      # build peer id out of version string, process id, and current time.
-      # Should be unique yet give us some identifying info. More info here:
-      # http://wiki.theory.org/BitTorrentSpecification#peer_id
-      "-RB#{BT::VERSION_STRING}-#{$$}-#{Time.now.to_i}".encode("BINARY")[0...20]
+      # build peer id out of version string, process id, and a set of random
+      # digits.  Should be unique yet give us some identifying info. More info
+      # here: http://wiki.theory.org/BitTorrentSpecification#peer_id
+      "-RB#{BT::VERSION_STRING}-#{$$}-#{SecureRandom.hex(11)}".encode("BINARY")[0...20]
     end
   end
 end

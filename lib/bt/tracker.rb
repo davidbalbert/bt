@@ -29,7 +29,7 @@ module BT
 
       raise TrackerError, "The tracker said: '#{resp.body}'" unless resp.code == "200"
 
-      @last_response = BEncode.load(resp.body)
+      @last_response = Bencode.load(resp.body)
       peers = @last_response["peers"]
 
       # TODO: Also support old style text IP lists

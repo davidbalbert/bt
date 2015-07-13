@@ -1,8 +1,6 @@
 require 'fileutils'
 require 'digest'
 
-require 'bencode'
-
 module BT
   FileInfo = Struct.new(:path, :length)
 
@@ -15,7 +13,7 @@ module BT
 
     def initialize(path)
       @path = File.expand_path(path)
-      @info = BEncode.load(File.open(@path, "rb") { |f| f.read })
+      @info = Bencode.decode(File.open(@path, "rb") { |f| f.read })
 
       @info["info"]["name"].force_encoding("UTF-8")
     end

@@ -1,4 +1,5 @@
 require 'bt/version'
+require 'bt/bencode'
 require 'bt/metainfo'
 require 'bt/fileset'
 require 'bt/tracker'

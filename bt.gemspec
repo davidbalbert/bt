@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = BT::VERSION
 
-  gem.add_development_dependency "pry", "~> 0.9.10"
-  gem.add_development_dependency "pry-debundle", "~> 0.6"
+  gem.add_development_dependency "pry"
+  gem.add_development_dependency "pry-debundle"
 end

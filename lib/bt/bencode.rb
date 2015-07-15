@@ -18,6 +18,10 @@ end
 
 class Hash
   def bencode
+    unless keys.all? { |k| k.is_a?(Symbol) || k.is_a?(String) }
+      raise BT::Bencode::EncodeError, "All keys must be symbols or strings"
+    end
+
     sorted = sort { |(k1, _), (k2, _)| k1.to_s <=> k2.to_s }
 
     "d#{sorted.map { |(k, v)| k.to_s.bencode + v.bencode }.join}e"
@@ -37,6 +41,7 @@ module BT
     end
 
     class ParseError < StandardError; end
+    class EncodeError < StandardError; end
 
     class Decoder
       attr_reader :input, :pos
